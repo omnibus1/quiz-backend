@@ -20,3 +20,8 @@ class QuizSerializer(serializers.ModelSerializer):
     class Meta:
         model=Quiz
         fields=['title','questions']
+
+class QuizSimpleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=Quiz
+        fields=['title','id']

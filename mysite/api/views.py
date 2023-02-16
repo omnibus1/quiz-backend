@@ -5,7 +5,7 @@ from .models import Quiz,Question,Answer
 from django.forms.models import model_to_dict
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-from .serializers import QuizSerializer,QuestionSerializer
+from .serializers import QuizSerializer,QuestionSerializer,QuizSimpleSerializer
 from rest_framework import generics
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponse
@@ -35,9 +35,9 @@ class QuizCreateAPIView(generics.CreateAPIView):
     queryset=Quiz.objects.all()
     serializer_class=QuizSerializer
 
-class QuizListCreateAPIView(generics.ListCreateAPIView):
+class QuizListAPIView(generics.ListCreateAPIView):
     queryset=Quiz.objects.all()
-    serializer_class=QuizSerializer
+    serializer_class=QuizSimpleSerializer
 
 @api_view(["GET","POST"])
 def quiz_alt_view(request,pk=None,*args,**kwargs):
@@ -64,4 +64,17 @@ def test(request,*args,**kwargs):
     print(json)
     quiz=Quiz.objects.order_by('?')[0]
     data=QuizSerializer(quiz).data
+    return Response(data)
+
+@api_view(["GET"])
+def quiz_list(request,*args,**kwargs):
+    objects=Quiz.objects.all()
+    data=QuizSimpleSerializer(objects).data
+    return Response(data)
+
+@api_view(["GET"])
+def quiz_questions(request,quiz_id,*args,**kwargs):
+
+    quiz=Quiz.objects.filter(id=quiz_id).get()
+    data=QuizSerializer(quiz).data['questions']
     return Response(data)
