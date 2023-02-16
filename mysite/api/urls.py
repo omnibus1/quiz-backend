@@ -10,4 +10,5 @@ urlpatterns=[
     path('<int:pk>/',views.QuizDetailAPIView.as_view()),
     path('create/',views.QuizCreateAPIView.as_view()),
     path('list/',views.QuizListCreateAPIView.as_view()),
+    path("test/",views.test)
 ]
